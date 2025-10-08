@@ -7,6 +7,8 @@ import paramiko
 from concurrent.futures import ThreadPoolExecutor
 from multiprocessing import Pool
 from datetime import datetime
+import pandas as pd
+
 
 # (1) ############################################## Different Cross-node delays generation #############################################################
 
@@ -104,9 +106,9 @@ def main():
     QPS = [50]
     script_path = "/home/ubuntu/DeathStarBench/socialNetwork/wrk2/scripts/social-network/compose-post.lua"
     urls = [
-        "http://nginx-thrift.social-network.svc.cluster.local:8080/wrk2-api/post/compose",
-        "http://nginx-thrift.social-network2.svc.cluster.local:8080/wrk2-api/post/compose",
-        "http://nginx-thrift.social-network3.svc.cluster.local:8080/wrk2-api/post/compose"
+        "http://nginx-thrift.social-network.svc.cluster.local:8080/wrk2-api/post/compose"
+        # "http://nginx-thrift.social-network2.svc.cluster.local:8080/wrk2-api/post/compose"
+        # "http://nginx-thrift.social-network3.svc.cluster.local:8080/wrk2-api/post/compose"
     ]
     
     # Get current date and time
@@ -119,16 +121,21 @@ def main():
 
     def latency_task():
         start_time = time.time()
+        delay_matrix_path = "/home/ubuntu/TraDE/Evaluations/adaptivePerf_TPDS_revision/delayMatrix/"
         while time.time() - start_time < int(duration.replace('m', '')) * 60:  # Run for {duration} minutes
             # Apply different delay matrix every intervals minutes
             if (time.time() - start_time) // delay_interval == 0: 
-                delay_matrix = generate_delay_matrix(9, 0, 0) 
+                # delay_matrix1_zero = generate_delay_matrix(9, 0, 0) 
+                delay_matrix = pd.read_csv(delay_matrix_path+'delay_matrix1_zero.csv', header=None)
             elif (time.time() - start_time) // delay_interval == 1:
-                delay_matrix = generate_delay_matrix(9, 5, 20)
+                # delay_matrix2_light = generate_delay_matrix(9, 5, 20) 
+                delay_matrix = pd.read_csv(delay_matrix_path+ 'delay_matrix2_light.csv', header=None)
             elif (time.time() - start_time) // delay_interval == 2:
-                delay_matrix = generate_delay_matrix(9, 5, 40)
+                # delay_matrix3_mid = generate_delay_matrix(9, 5, 60)
+                delay_matrix = pd.read_csv(delay_matrix_path + 'delay_matrix4_heavy.csv', header=None)
             else:
-                delay_matrix = generate_delay_matrix(9, 5, 30)
+                # delay_matrix4_mid = generate_delay_matrix(9, 5, 30)
+                delay_matrix = pd.read_csv(delay_matrix_path + 'delay_matrix3_mid.csv', header=None)
 
             # Apply latency injection
             params_list = [(source_node, delay_matrix, node_details) for source_node in node_details.keys()]

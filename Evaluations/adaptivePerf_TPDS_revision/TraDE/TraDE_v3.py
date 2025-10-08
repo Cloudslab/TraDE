@@ -728,7 +728,7 @@ class TraDE_MicroserviceScheduler:
 if __name__ == "__main__":
     # Initialize the scheduler with necessary parameters
     prom_url = "http://10.105.116.175:9090"
-    qos_target = 250  # QoS target in milliseconds [300, 250,...]
+    qos_target = 250  # QoS target in milliseconds [200, 300, 250, 350...]
     # time_window is the look_back window for the average response time
     time_window = 1  # Time window in minutes,
     namespace = 'social-network3'

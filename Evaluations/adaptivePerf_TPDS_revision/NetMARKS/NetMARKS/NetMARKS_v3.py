@@ -310,7 +310,7 @@ def main():
     _namespace = 'social-network2'
     _timerange = 1 # adjust the range when at practical experiment
     _step_interval = '1m'
-    _qos_target = 250 # in milliseconds
+    _qos_target = 250 # in milliseconds # 300, 250, 350
     
     if trigger_migration(qos_target=_qos_target, time_window= _timerange, namespace=_namespace, response_code="200"):
         print("Migration triggered.")

@@ -106,10 +106,10 @@ def main():
 
     thread_num = 8
     connections = 64
-    duration = '40m' #'40m'  # Total duration in minutes 
-    delay_changing_interval = 5 * 60 #5 * 60  # Change delay every 5 minutes
+    duration = '60m' #'40m', '60m'  # Total duration in minutes 
+    delay_changing_interval = 20 * 60 #5 * 60  # Change delay every 20 minutes in the whole 60 mins
     
-    QPS_trend = [30, 18, 40, 30, 10, 34, 55, 40, 48, 20]  # Trend of QPS values over time
+    QPS_trend = [30, 10, 50, 70]  # Trend of QPS values over time
     
     script_path = "/home/ubuntu/DeathStarBench/socialNetwork/wrk2/scripts/social-network/compose-post.lua"
     urls = [
@@ -124,28 +124,28 @@ def main():
 
     # Total number of intervals equal to the length of QPS_trend
     total_duration_seconds = int(duration.replace('m', '')) * 60  # Convert duration to seconds
-    num_intervals = len(QPS_trend)
-    interval_duration = total_duration_seconds // num_intervals  # Duration per QPS
+    num_QPS_intervals = len(QPS_trend) # eg.: 4 different QPS values
+    QPS_interval_duration = delay_changing_interval // num_QPS_intervals  # Duration per QPS, eg: 20mins/4 = 5 mins
    
 
     def latency_task():
         start_time = time.time()
         while time.time() - start_time < total_duration_seconds:  # Run for total duration
-            if delay_changing_interval == 0:
-                delay_matrix = generate_delay_matrix(9, 0, 0)
-            elif delay_changing_interval == 1:
+            if (time.time() - start_time) // delay_changing_interval == 0: # First delay injection interval: 0 ~ 20 mins
                 delay_matrix = generate_delay_matrix(9, 5, 10)
-            elif delay_changing_interval == 2:
+            elif (time.time() - start_time) // delay_changing_interval == 1: # Second dealy injection interval: 20 ~ 40 mins
                 delay_matrix = generate_delay_matrix(9, 5, 30)
-            else:
+            elif (time.time() - start_time) // delay_changing_interval == 2: # Third dealy injection interval: 40 ~ 60 mins
                 delay_matrix = generate_delay_matrix(9, 5, 20)
+            # else:
+            #     delay_matrix = generate_delay_matrix(9, 5, 20)
 
             # Apply latency injection
             params_list = [(source_node, delay_matrix, node_details) for source_node in node_details.keys()]
             with Pool(processes=len(node_details)) as pool:
                 pool.map(automate_latency_injection, params_list)
 
-            time.sleep(interval_duration)  # Wait for the next interval to apply the next delay matrix
+            time.sleep(delay_changing_interval)  # Wait for the next interval to apply the next delay matrix
 
     def run_single_workload(url, thread_num, connections, qps, script_path, output_file):
         command = [
@@ -153,7 +153,7 @@ def main():
             "-D", "exp",
             f"-t{thread_num}",
             f"-c{connections}",
-            f"-d{interval_duration}s",  # Use interval duration for each QPS change
+            f"-d{QPS_interval_duration}s",  # Use interval duration for each QPS change
             "-L",
             "-s", script_path,
             url,
@@ -169,7 +169,7 @@ def main():
 
         # Loop over intervals, adjusting QPS at each interval
         for i, qps in enumerate(QPS_trend):
-            current_interval_start = start_time + i * interval_duration  # Start time for this interval
+            current_interval_start = start_time + i * QPS_interval_duration  # Start time for this interval
 
             # Run workloads for each URL with current QPS
             with ThreadPoolExecutor(max_workers=len(urls)) as executor:
@@ -177,7 +177,7 @@ def main():
                     executor.submit(run_single_workload, url, thread_num, connections, qps, script_path, output_file)
 
             # Wait for this interval to finish before moving to the next
-            time.sleep(max(0, current_interval_start + interval_duration - time.time()))
+            time.sleep(max(0, current_interval_start + QPS_interval_duration - time.time()))
 
     # Running both tasks in parallel
     with ThreadPoolExecutor(max_workers=8) as executor:

@@ -118,11 +118,11 @@ def main():
             if (time.time() - start_time) // delay_interval == 0: 
                 delay_matrix = generate_delay_matrix(9, 0, 0) 
             elif (time.time() - start_time) // delay_interval == 1:
-                delay_matrix = generate_delay_matrix(9, 5, 20)
+                delay_matrix = generate_delay_matrix(9, 5, 15)
             elif (time.time() - start_time) // delay_interval == 2:
                 delay_matrix = generate_delay_matrix(9, 5, 30)
             else:
-                delay_matrix = generate_delay_matrix(9, 5, 40)
+                delay_matrix = generate_delay_matrix(9, 5, 60)
 
             # Apply latency injection
             params_list = [(source_node, delay_matrix, node_details) for source_node in node_details.keys()]

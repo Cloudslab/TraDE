@@ -1,0 +1,137 @@
+# placements-sn.yaml
+# Pin each Social Network microservice to an initial node.
+
+compose-post-service:
+  pod:
+    nodeSelector:
+      kubernetes.io/hostname: "k8s-worker-1"
+
+user-timeline-service:
+  pod:
+    nodeSelector:
+      kubernetes.io/hostname: "k8s-worker-1"
+
+user-timeline-redis:
+  pod:
+    nodeSelector:
+      kubernetes.io/hostname: "k8s-worker-1"
+
+home-timeline-service:
+  pod:
+    nodeSelector:
+      kubernetes.io/hostname: "k8s-worker-2"
+
+home-timeline-redis:
+  pod:
+    nodeSelector:
+      kubernetes.io/hostname: "k8s-worker-2"
+
+unique-id-service:
+  pod:
+    nodeSelector:
+      kubernetes.io/hostname: "k8s-worker-2"
+
+media-service:
+  pod:
+    nodeSelector:
+      kubernetes.io/hostname: "k8s-worker-3"
+
+media-frontend:
+  pod:
+    nodeSelector:
+      kubernetes.io/hostname: "k8s-worker-3"
+
+media-memcached:
+  pod:
+    nodeSelector:
+      kubernetes.io/hostname: "k8s-worker-3"
+
+media-mongodb:
+  pod:
+    nodeSelector:
+      kubernetes.io/hostname: "k8s-worker-4"
+
+nginx-thrift:
+  pod:
+    nodeSelector:
+      kubernetes.io/hostname: "k8s-worker-4"
+
+jaeger:
+  pod:
+    nodeSelector:
+      kubernetes.io/hostname: "k8s-worker-4"
+
+post-storage-service:
+  pod:
+    nodeSelector:
+      kubernetes.io/hostname: "k8s-worker-5"
+
+post-storage-memcached:
+  pod:
+    nodeSelector:
+      kubernetes.io/hostname: "k8s-worker-5"
+
+post-storage-mongodb:
+  pod:
+    nodeSelector:
+      kubernetes.io/hostname: "k8s-worker-5"
+
+social-graph-service:
+  pod:
+    nodeSelector:
+      kubernetes.io/hostname: "k8s-worker-6"
+
+social-graph-redis:
+  pod:
+    nodeSelector:
+      kubernetes.io/hostname: "k8s-worker-6"
+
+social-graph-mongodb:
+  pod:
+    nodeSelector:
+      kubernetes.io/hostname: "k8s-worker-6"
+
+url-shorten-service:
+  pod:
+    nodeSelector:
+      kubernetes.io/hostname: "k8s-worker-7"
+
+url-shorten-memcached:
+  pod:
+    nodeSelector:
+      kubernetes.io/hostname: "k8s-worker-7"
+
+url-shorten-mongodb:
+  pod:
+    nodeSelector:
+      kubernetes.io/hostname: "k8s-worker-7"
+
+user-service:
+  pod:
+    nodeSelector:
+      kubernetes.io/hostname: "k8s-worker-8"
+
+user-memcached:
+  pod:
+    nodeSelector:
+      kubernetes.io/hostname: "k8s-worker-8"
+
+user-mongodb:
+  pod:
+    nodeSelector:
+      kubernetes.io/hostname: "k8s-worker-8"
+
+text-service:
+  pod:
+    nodeSelector:
+      kubernetes.io/hostname: "k8s-worker-9"
+
+user-mention-service:
+  pod:
+    nodeSelector:
+      kubernetes.io/hostname: "k8s-worker-9"
+
+user-timeline-mongodb:
+  pod:
+    nodeSelector:
+      kubernetes.io/hostname: "k8s-worker-9"
