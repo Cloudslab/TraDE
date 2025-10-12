@@ -114,7 +114,10 @@ def main():
     # Get current date and time
     now = datetime.now()
     timestamp = now.strftime("%Y_%b_%d_%H%M")  # Example: 2024_Oct_20_1930
-    
+    # create "data" folder if not exists
+    if not os.path.exists("/home/ubuntu/TraDE/Evaluations/adaptivePerf_TPDS_revision/data"):
+        os.makedirs("/home/ubuntu/TraDE/Evaluations/adaptivePerf_TPDS_revision/data")
+        
     output_file = f"/home/ubuntu/TraDE/Evaluations/adaptivePerf_TPDS_revision/data/output_{timestamp}.txt"
 
     
@@ -126,16 +129,21 @@ def main():
             # Apply different delay matrix every intervals minutes
             if (time.time() - start_time) // delay_interval == 0: 
                 # delay_matrix1_zero = generate_delay_matrix(9, 0, 0) 
+                
                 delay_matrix = pd.read_csv(delay_matrix_path+'delay_matrix1_zero.csv', header=None)
+                print("Applying zero delay matrix")
             elif (time.time() - start_time) // delay_interval == 1:
                 # delay_matrix2_light = generate_delay_matrix(9, 5, 20) 
                 delay_matrix = pd.read_csv(delay_matrix_path+ 'delay_matrix2_light.csv', header=None)
+                print("Applying light delay matrix")
             elif (time.time() - start_time) // delay_interval == 2:
                 # delay_matrix3_mid = generate_delay_matrix(9, 5, 60)
                 delay_matrix = pd.read_csv(delay_matrix_path + 'delay_matrix4_heavy.csv', header=None)
+                print("Applying heavy delay matrix")
             else:
                 # delay_matrix4_mid = generate_delay_matrix(9, 5, 30)
                 delay_matrix = pd.read_csv(delay_matrix_path + 'delay_matrix3_mid.csv', header=None)
+                print("Applying mid delay matrix")
 
             # Apply latency injection
             params_list = [(source_node, delay_matrix, node_details) for source_node in node_details.keys()]
