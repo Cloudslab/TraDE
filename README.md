@@ -50,7 +50,7 @@ A placement that works well at deployment time can become inefficient when:
 
 - request types, QPS and service call paths change;
 - traffic becomes concentrated on different upstream/downstream pairs;
-- communication delays between cluster nodes drift; or
+- cross-node communication latency changes between cluster nodes; or
 - a previously acceptable placement begins violating an application QoS target.
 
 TraDE measures those changes and recomputes selected service placements instead of assuming the initial schedule remains suitable.
@@ -72,9 +72,7 @@ TraDE measures those changes and recomputes selected service placements instead 
 | Evaluations        | Contains experiment drivers, stored measurements and analysis notebooks used for the paper | `Evaluations/`                                                   |
 
 
-## Published evaluation environment
-
-The paper reports the following reference environment:
+## Evaluation environment
 
 - Kubernetes 1.27.4
 - Calico 3.26.1
@@ -96,7 +94,7 @@ TraDE/
 ├── PGA_Mapper/             # Placement, scheduling and pod migration
 ├── Taffic_Analyzer/        # Istio metric collection and traffic graphs
 ├── Dynamics_Manager/       # Delay injection and latency measurement artefacts
-├── Workloads/              # DeathStarBench and workload drivers
+├── Workloads/              # DeathStarBench benchmark and workload configurations
 ├── Evaluations/            # Baselines, raw measurements and analysis notebooks
 ├── Motivation_Exp/         # Smaller experiments from the paper motivation
 └── K8s_cluster_setUp/      # Cluster setup notes and manifests
@@ -122,7 +120,7 @@ Before running the scheduler, inspect and update:
 ## Reproducing the study
 
 At a high level, the paper workflow is:
-1. Provision the Kubernetes, CNI, Istio, Prometheus and Jaeger environment.
+1. Provision of the Kubernetes, CNI, Istio, Prometheus and Jaeger environment.
 2. Deploy the DeathStarBench Social Network benchmark and initialise its data.
 3. Deploy the latency-measurement agents on the worker nodes.
 4. Configure the target namespace, QoS threshold, Prometheus endpoint and workload.
@@ -130,8 +128,6 @@ At a high level, the paper workflow is:
 6. Apply the request-mix and cross-node-delay scenarios.
 7. Collect response time, throughput, goodput, placement time and overhead measurements.
 8. Use the notebooks under `Evaluations/` to reproduce the reported analyses and figures.
-
-A future `docs/reproduction.md` should turn these stages into tested commands and map every paper figure to its input data and notebook.
 
 ## Design notes
 
@@ -155,9 +151,7 @@ TraDE launches replacement pods on target nodes and waits for readiness before r
 
 - The implementation is a research prototype and has not been evaluated as a multi-tenant production scheduler.
 - Several configuration values and cluster assumptions are currently embedded in scripts.
-- The full published experiment requires a multi-node cluster and the associated observability stack.
-- The repository vendors sizeable third-party Istio and DeathStarBench source trees, making the clone large and obscuring the original TraDE code.
-- Historical scripts and notebooks remain for traceability, but the canonical runtime and evaluation paths need clearer versioning.
+- Historical scripts and notebooks remain for traceability.
 
 ## Citation
 
