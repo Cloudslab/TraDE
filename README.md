@@ -5,7 +5,7 @@
 
 **Authors:** Ming Chen, Muhammed Tawfiqul Islam, Maria Rodriguez Read, and Rajkumar Buyya  
 **Affiliation:** The University of Melbourne  
-**Journal:** _IEEE Transactions on Parallel and Distributed Systems, vol. 37, no. 1, 2026_  
+**Journal:** _IEEE Transactions on Parallel and Distributed Systems_ $\color{red}{\textit{(CCF A; CORE A*; JCR Q1)}}$, vol. 37, no. 1, 2026.  
 **Repository:** [https://github.com/Cloudslab/TraDE](https://github.com/Cloudslab/TraDE)
 
 
